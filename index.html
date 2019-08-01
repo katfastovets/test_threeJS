@@ -1,4 +1,4 @@
-<!doctype html>
+<!--<!doctype html>-->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -21,14 +21,16 @@
         <option value="cube">Куб</option>
         <option value="pyramid">Пирамида</option>
         <option value="sphere">Сфера</option>
+        <option value="cone">Конус</option>
     </select>
     <input type="text" placeholder="1-10" name="scale" id="scale">
     <button id="btnCreate" type="button">Create</button>
+    <script src="./js/three.js"></script>
+    <script src="./js/OrbitControls.js"></script>
+    <script>
+        // import * as THREE from "./js/three.module.js";
 
-    <script type="module">
-        import * as THREE from "./js/three.module.js";
-
-        import { OrbitControls } from './js/OrbitControls.js';
+        // import { OrbitControls } from './js/OrbitControls.js';
 
         let scene = new THREE.Scene();
         scene.background = new THREE.Color( 0xcccccc );
@@ -38,7 +40,7 @@
         let renderer = new THREE.WebGLRenderer();
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
-        let controls = new OrbitControls( camera, renderer.domElement );
+        let controls = new THREE.OrbitControls( camera, renderer.domElement );
 
 
         let createCube = () => {
@@ -60,14 +62,22 @@
 
         };
 
+        let createCone = () => {
+            let geometry = new THREE.ConeGeometry( 5, 10, 8 );
+            let material = new THREE.MeshPhongMaterial( { color: 0xffffff, flatShading: true } );
+            return new THREE.Mesh( geometry, material );
+        };
+
         let createShape = (shapeName, scale) => {
             let shape;
             if (shapeName === 'cube') {
                 shape = createCube();
             } else if (shapeName === 'pyramid') {
-                shape = createPyramid()
+                shape = createPyramid();
             } else if (shapeName === 'sphere') {
-                shape = createSphere()
+                shape = createSphere();
+            } else if (shapeName === 'cone') {
+                shape = createCone();
             }
 
             scale = scale || 1;
