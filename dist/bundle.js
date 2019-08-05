@@ -102,7 +102,7 @@ __webpack_require__.r(__webpack_exports__);
 
 let scene = new three__WEBPACK_IMPORTED_MODULE_0__["Scene"]();
 scene.background = new three__WEBPACK_IMPORTED_MODULE_0__["Color"](0xcccccc);
-scene.fog = new three__WEBPACK_IMPORTED_MODULE_0__["FogExp2"](0xcccccc, 0.002);
+scene.fog = new three__WEBPACK_IMPORTED_MODULE_0__["FogExp2"](0xcccccc, 0.02);
 let camera = new three__WEBPACK_IMPORTED_MODULE_0__["PerspectiveCamera"](70, window.innerWidth / window.innerHeight, 1, 10000);
 
 let renderer = new three__WEBPACK_IMPORTED_MODULE_0__["WebGLRenderer"]();
@@ -133,7 +133,7 @@ class Shape extends three__WEBPACK_IMPORTED_MODULE_0__["Object3D"] {
                 break;
         }
 
-        let material = new three__WEBPACK_IMPORTED_MODULE_0__["MeshPhongMaterial"]({color: 0xffffff, flatShading: true});
+        let material = new three__WEBPACK_IMPORTED_MODULE_0__["MeshPhongMaterial"]({color: 5059197, flatShading: true});
         this.shape = new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](this.geometry, material);
 
         if (scale) {
@@ -144,7 +144,6 @@ class Shape extends three__WEBPACK_IMPORTED_MODULE_0__["Object3D"] {
         this.shape.position.x = Math.random() * 10;
         this.shape.position.y = Math.random() * 10;
         this.shape.position.z = Math.random() * 10;
-        console.log(this.shape);
     }
 
     addShape() {
@@ -177,15 +176,14 @@ camera.position.y = 10;
 camera.position.z = 10;
 controls.update();
 
-let directLight = new three__WEBPACK_IMPORTED_MODULE_0__["DirectionalLight"](0xffffff);
+let directLight = new three__WEBPACK_IMPORTED_MODULE_0__["DirectionalLight"](12964329);
 directLight.position.set(1, 1, 1);
 scene.add(directLight);
-let directLight2 = new three__WEBPACK_IMPORTED_MODULE_0__["DirectionalLight"](0x222222);
+let directLight2 = new three__WEBPACK_IMPORTED_MODULE_0__["DirectionalLight"](12964329);
 directLight2.position.set(-1, -1, -1);
 scene.add(directLight2);
 let ambientLight = new three__WEBPACK_IMPORTED_MODULE_0__["AmbientLight"](0x222222);
 scene.add(ambientLight);
-
 
 function animate() {
     requestAnimationFrame(animate);

@@ -3,7 +3,7 @@ import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 
 let scene = new THREE.Scene();
 scene.background = new THREE.Color(0xcccccc);
-scene.fog = new THREE.FogExp2(0xcccccc, 0.002);
+scene.fog = new THREE.FogExp2(0xcccccc, 0.02);
 let camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 10000);
 
 let renderer = new THREE.WebGLRenderer();
@@ -34,7 +34,7 @@ class Shape extends THREE.Object3D {
                 break;
         }
 
-        let material = new THREE.MeshPhongMaterial({color: 0xffffff, flatShading: true});
+        let material = new THREE.MeshPhongMaterial({color: 5059197, flatShading: true});
         this.shape = new THREE.Mesh(this.geometry, material);
 
         if (scale) {
@@ -45,7 +45,6 @@ class Shape extends THREE.Object3D {
         this.shape.position.x = Math.random() * 10;
         this.shape.position.y = Math.random() * 10;
         this.shape.position.z = Math.random() * 10;
-        console.log(this.shape);
     }
 
     addShape() {
@@ -78,15 +77,14 @@ camera.position.y = 10;
 camera.position.z = 10;
 controls.update();
 
-let directLight = new THREE.DirectionalLight(0xffffff);
+let directLight = new THREE.DirectionalLight(12964329);
 directLight.position.set(1, 1, 1);
 scene.add(directLight);
-let directLight2 = new THREE.DirectionalLight(0x222222);
+let directLight2 = new THREE.DirectionalLight(12964329);
 directLight2.position.set(-1, -1, -1);
 scene.add(directLight2);
 let ambientLight = new THREE.AmbientLight(0x222222);
 scene.add(ambientLight);
-
 
 function animate() {
     requestAnimationFrame(animate);
