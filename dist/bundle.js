@@ -101,88 +101,90 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let scene = new three__WEBPACK_IMPORTED_MODULE_0__["Scene"]();
-scene.background = new three__WEBPACK_IMPORTED_MODULE_0__["Color"]( 0xcccccc );
-scene.fog = new three__WEBPACK_IMPORTED_MODULE_0__["FogExp2"]( 0xcccccc, 0.002 );
+scene.background = new three__WEBPACK_IMPORTED_MODULE_0__["Color"](0xcccccc);
+scene.fog = new three__WEBPACK_IMPORTED_MODULE_0__["FogExp2"](0xcccccc, 0.002);
 let camera = new three__WEBPACK_IMPORTED_MODULE_0__["PerspectiveCamera"](70, window.innerWidth / window.innerHeight, 1, 10000);
 
 let renderer = new three__WEBPACK_IMPORTED_MODULE_0__["WebGLRenderer"]();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
-let controls = new three_examples_jsm_controls_OrbitControls__WEBPACK_IMPORTED_MODULE_1__["OrbitControls"]( camera, renderer.domElement );
 
-let createCube = () => {
-    let geometry = new three__WEBPACK_IMPORTED_MODULE_0__["BoxGeometry"](1, 1, 1);
-    let material = new three__WEBPACK_IMPORTED_MODULE_0__["MeshPhongMaterial"]( { color: 0xffffff, flatShading: true });
-    return new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](geometry, material);
-};
+let controls = new three_examples_jsm_controls_OrbitControls__WEBPACK_IMPORTED_MODULE_1__["OrbitControls"](camera, renderer.domElement);
 
-let createSphere = () => {
-    let geometry = new three__WEBPACK_IMPORTED_MODULE_0__["SphereGeometry"](5, 32, 32);
-    let material = new three__WEBPACK_IMPORTED_MODULE_0__["MeshPhongMaterial"]( { color: 0xffffff, flatShading: true });
-    return new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](geometry, material);
-};
+class Shape extends three__WEBPACK_IMPORTED_MODULE_0__["Object3D"] {
+    constructor(shapeName, scale) {
+        super();
 
-let createPyramid = () => {
-    let material = new three__WEBPACK_IMPORTED_MODULE_0__["MeshPhongMaterial"]( { color: 0xffffff, flatShading: true } );
-    let geometry = new three__WEBPACK_IMPORTED_MODULE_0__["TetrahedronGeometry"]( 5, 0 );
-    return new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](geometry, material);
+        switch (shapeName) {
+            case 'cube':
+                this.geometry = new three__WEBPACK_IMPORTED_MODULE_0__["BoxGeometry"](1, 1, 1);
+                break;
+            case 'pyramid':
+                this.geometry = new three__WEBPACK_IMPORTED_MODULE_0__["TetrahedronGeometry"](5, 0);
+                break;
+            case 'sphere':
+                this.geometry = new three__WEBPACK_IMPORTED_MODULE_0__["SphereGeometry"](5, 32, 32);
+                break;
+            case 'cone':
+                this.geometry = new three__WEBPACK_IMPORTED_MODULE_0__["ConeGeometry"](5, 10, 8);
+                break;
+            default:
+                this.geometry = new three__WEBPACK_IMPORTED_MODULE_0__["BoxGeometry"](1, 1, 1);
+                break;
+        }
 
-};
+        let material = new three__WEBPACK_IMPORTED_MODULE_0__["MeshPhongMaterial"]({color: 0xffffff, flatShading: true});
+        this.shape = new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](this.geometry, material);
 
-let createCone = () => {
-    let geometry = new three__WEBPACK_IMPORTED_MODULE_0__["ConeGeometry"]( 5, 10, 8 );
-    let material = new three__WEBPACK_IMPORTED_MODULE_0__["MeshPhongMaterial"]( { color: 0xffffff, flatShading: true } );
-    return new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"]( geometry, material );
-};
+        if (scale) {
+            this.geometry.scale(scale, scale, scale);
+        }
 
-let createShape = (shapeName, scale) => {
-    let shape;
-    if (shapeName === 'cube') {
-        shape = createCube();
-    } else if (shapeName === 'pyramid') {
-        shape = createPyramid();
-    } else if (shapeName === 'sphere') {
-        shape = createSphere();
-    } else if (shapeName === 'cone') {
-        shape = createCone();
+
+        this.shape.position.x = Math.random() * 10;
+        this.shape.position.y = Math.random() * 10;
+        this.shape.position.z = Math.random() * 10;
+        console.log(this.shape);
     }
 
-    scale = scale || 1;
-    shape.geometry.scale(scale, scale, scale);
+    addShape() {
+        scene.add(this.shape);
+    }
 
-    scene.add(shape);
+    deleteShape() {
+        const $newID = document.createElement("span");
+        $newID.textContent = this.shape.uuid;
+        const $info = document.createElement('div');
+        $info.setAttribute('id', 'info');
 
-    shape.position.x = Math.random() * 10;
-    shape.position.y = Math.random() * 10;
-    shape.position.z = Math.random() * 10;
-
-    const $newID = document.createElement("span");
-    $newID.textContent = shape.uuid;
-    const $info = document.createElement('div');
-    $info.setAttribute('id', 'info');
-
-    const $btnDelete = document.createElement('button');
-    $btnDelete.setAttribute('id', 'delete');
-    $btnDelete.textContent = 'X';
-    $info.appendChild($newID);
-    $info.appendChild($btnDelete);
-    document.body.append($info);
-
-};
+        const $btnDelete = document.createElement('button');
+        $btnDelete.setAttribute('class', 'delete');
+        $btnDelete.textContent = 'X';
+        $btnDelete.addEventListener('click', function (e) {
+            let uuid = this.parentNode.children[0].textContent;
+            let obj = scene.getObjectByProperty('uuid', uuid);
+            scene.remove(obj);
+            this.parentNode.remove();
+        });
+        $info.appendChild($newID);
+        $info.appendChild($btnDelete);
+        document.body.append($info);
+    }
+}
 
 camera.position.x = 10;
 camera.position.y = 10;
 camera.position.z = 10;
 controls.update();
 
-let directLight = new three__WEBPACK_IMPORTED_MODULE_0__["DirectionalLight"]( 0xffffff );
-directLight.position.set( 1, 1, 1 );
-scene.add( directLight );
-let directLight2 = new three__WEBPACK_IMPORTED_MODULE_0__["DirectionalLight"]( 0x222222 );
-directLight2.position.set( - 1, - 1, - 1 );
-scene.add( directLight2 );
-let ambientLight = new three__WEBPACK_IMPORTED_MODULE_0__["AmbientLight"]( 0x222222 );
-scene.add( ambientLight );
+let directLight = new three__WEBPACK_IMPORTED_MODULE_0__["DirectionalLight"](0xffffff);
+directLight.position.set(1, 1, 1);
+scene.add(directLight);
+let directLight2 = new three__WEBPACK_IMPORTED_MODULE_0__["DirectionalLight"](0x222222);
+directLight2.position.set(-1, -1, -1);
+scene.add(directLight2);
+let ambientLight = new three__WEBPACK_IMPORTED_MODULE_0__["AmbientLight"](0x222222);
+scene.add(ambientLight);
 
 
 function animate() {
@@ -201,15 +203,9 @@ const $btnCreate = document.getElementById('btnCreate');
 $btnCreate.addEventListener('click', function () {
     let geometry = $selectGeometry.value;
     let scale = $inputScale.value;
-    createShape(geometry, scale);
-});
-document.body.addEventListener('click', function (e) {
-    if (e.target.id === 'delete') {
-        let uuid = e.target.parentNode.children[0].textContent;
-        let obj = scene.getObjectByProperty('uuid', uuid);
-        scene.remove(obj);
-        e.target.parentNode.remove();
-    }
+    let shape = new Shape(geometry, scale);
+    shape.deleteShape();
+    shape.addShape();
 });
 
 
